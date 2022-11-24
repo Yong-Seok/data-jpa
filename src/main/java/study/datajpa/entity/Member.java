@@ -7,30 +7,39 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"id", "userName", "age"})
+@ToString(of = {"id", "username", "age"})
+@NamedQuery(
+        name = "Member.findByUsername",
+        query = "SELECT m FROM Member m WHERE m.username = :username"
+)
 public class Member {
 
     @Id @GeneratedValue
     @Column(name = "member_id")
     private Long id;
-    private String userName;
+    private String username;
     private int age;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
 
-    public Member(String userName) {
-        this.userName = userName;
+    public Member(String username) {
+        this.username = username;
     }
 
-    public Member(String userName, int age, Team team) {
-        this.userName = userName;
+    public Member(String username, int age, Team team) {
+        this.username = username;
         this.age = age;
 
         if(team != null) {
             changeTeam(team);
         }
+    }
+
+    public Member(String username, int age) {
+        this.username = username;
+        this.age = age;
     }
 
     public void changeTeam(Team team) {
